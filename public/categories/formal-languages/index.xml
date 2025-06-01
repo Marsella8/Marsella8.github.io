@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Formal-Languages on Pietro&#39;s Notes</title>
-    <link>http://example.org/categories/formal-languages/</link>
+    <link>http://marsella.io/categories/formal-languages/</link>
     <description>Recent content in Formal-Languages on Pietro&#39;s Notes</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://example.org/categories/formal-languages/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://marsella.io/categories/formal-languages/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Graph Libraries are Hard</title>
-      <link>http://example.org/posts/graph-libraries/</link>
+      <link>http://marsella.io/posts/graph-libraries/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>http://example.org/posts/graph-libraries/</guid>
+      <guid>http://marsella.io/posts/graph-libraries/</guid>
       <description></description>
     </item>
     <item>
       <title>Groups and Lean</title>
-      <link>http://example.org/posts/lean-groups/</link>
+      <link>http://marsella.io/posts/lean-groups/</link>
       <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
-      <guid>http://example.org/posts/lean-groups/</guid>
+      <guid>http://marsella.io/posts/lean-groups/</guid>
       <description>&lt;p&gt;Groups are so cool!&#xA;Lean is so cool!&#xA;Why am I doing this? You&#39;ll see!&lt;/p&gt;</description>
     </item>
   </channel>

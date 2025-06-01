@@ -2,55 +2,55 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://example.org/categories/</loc>
+    <loc>http://marsella.io/categories/</loc>
     <lastmod>2025-05-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/categories/compilers/</loc>
+    <loc>http://marsella.io/categories/compilers/</loc>
     <lastmod>2025-05-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/posts/lazy-matmuls/</loc>
+    <loc>http://marsella.io/posts/lazy-matmuls/</loc>
     <lastmod>2025-05-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/</loc>
+    <loc>http://marsella.io/</loc>
     <lastmod>2025-05-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/posts/</loc>
+    <loc>http://marsella.io/posts/</loc>
     <lastmod>2025-05-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/about/</loc>
+    <loc>http://marsella.io/about/</loc>
     <lastmod>2025-05-17T12:33:03-07:00</lastmod>
   </url><url>
-    <loc>http://example.org/post-its/canonicalization/</loc>
+    <loc>http://marsella.io/post-its/canonicalization/</loc>
     <lastmod>2025-05-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/categories/formal-languages/</loc>
+    <loc>http://marsella.io/categories/formal-languages/</loc>
     <lastmod>2025-05-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/posts/graph-libraries/</loc>
+    <loc>http://marsella.io/posts/graph-libraries/</loc>
     <lastmod>2025-05-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/post-its/</loc>
+    <loc>http://marsella.io/post-its/</loc>
     <lastmod>2025-05-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/posts/lean-groups/</loc>
+    <loc>http://marsella.io/posts/lean-groups/</loc>
     <lastmod>2025-05-15T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/categories/graph-theory/</loc>
+    <loc>http://marsella.io/categories/graph-theory/</loc>
     <lastmod>2025-05-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/posts/modular-decomposition/</loc>
+    <loc>http://marsella.io/posts/modular-decomposition/</loc>
     <lastmod>2025-05-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/post-its/associativity/</loc>
+    <loc>http://marsella.io/post-its/associativity/</loc>
   </url><url>
-    <loc>http://example.org/post-its/bands-and-torus/</loc>
+    <loc>http://marsella.io/post-its/bands-and-torus/</loc>
   </url><url>
-    <loc>http://example.org/post-its/kernels/</loc>
+    <loc>http://marsella.io/post-its/kernels/</loc>
   </url><url>
-    <loc>http://example.org/post-its/mean/</loc>
+    <loc>http://marsella.io/post-its/mean/</loc>
   </url><url>
-    <loc>http://example.org/post-its/naive-questions/</loc>
+    <loc>http://marsella.io/post-its/naive-questions/</loc>
   </url><url>
-    <loc>http://example.org/tags/</loc>
+    <loc>http://marsella.io/tags/</loc>
   </url>
 </urlset>

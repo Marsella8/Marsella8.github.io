@@ -2,52 +2,52 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Post-Its on Pietro&#39;s Notes</title>
-    <link>http://example.org/post-its/</link>
+    <link>http://marsella.io/post-its/</link>
     <description>Recent content in Post-Its on Pietro&#39;s Notes</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://example.org/post-its/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://marsella.io/post-its/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Canonicalization</title>
-      <link>http://example.org/post-its/canonicalization/</link>
+      <link>http://marsella.io/post-its/canonicalization/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>http://example.org/post-its/canonicalization/</guid>
+      <guid>http://marsella.io/post-its/canonicalization/</guid>
       <description>&lt;p&gt;It&amp;rsquo;s all canonicalization! God fucking damn-it, every single time there is a problem is always because of an&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://example.org/post-its/associativity/</link>
+      <link>http://marsella.io/post-its/associativity/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://example.org/post-its/associativity/</guid>
+      <guid>http://marsella.io/post-its/associativity/</guid>
       <description>&lt;p&gt;2 way associativy autmatically gives n-way associativity!&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://example.org/post-its/bands-and-torus/</link>
+      <link>http://marsella.io/post-its/bands-and-torus/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://example.org/post-its/bands-and-torus/</guid>
+      <guid>http://marsella.io/post-its/bands-and-torus/</guid>
       <description>&lt;p&gt;D_2p are bands, C_2p is torus&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://example.org/post-its/kernels/</link>
+      <link>http://marsella.io/post-its/kernels/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://example.org/post-its/kernels/</guid>
+      <guid>http://marsella.io/post-its/kernels/</guid>
       <description>&lt;p&gt;Kernels are about memory access patterns =&amp;gt; No global compilers?&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://example.org/post-its/mean/</link>
+      <link>http://marsella.io/post-its/mean/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://example.org/post-its/mean/</guid>
+      <guid>http://marsella.io/post-its/mean/</guid>
       <description>&lt;p&gt;Mean is a commutative but not associative operator!&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://example.org/post-its/naive-questions/</link>
+      <link>http://marsella.io/post-its/naive-questions/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://example.org/post-its/naive-questions/</guid>
+      <guid>http://marsella.io/post-its/naive-questions/</guid>
       <description>&lt;ol&gt;&#xA;&lt;li&gt;Why do we treat multiplication and addition so differently. Isn;t one just repeating the other?&lt;/li&gt;&#xA;&lt;li&gt;Why do Sylow groups matter?&lt;/li&gt;&#xA;&lt;li&gt;So ideals are the ring theory equivalent of normal subgroups:&#xA;Subgroups &amp;lt;=&amp;gt; SUbring: they have to be closed wrt operator (add and mult, resp).&#xA;Normal Subgroups &amp;lt;=&amp;gt; Ideals: on top of conditions above, we also need to be closed wrt to conjugacy (resp add, mult) wrt to all the elements outside of the group. Question? Why is the absorption 1condition imposed on mult rather&lt;/li&gt;&#xA;&lt;/ol&gt;</description>
     </item>
   </channel>
