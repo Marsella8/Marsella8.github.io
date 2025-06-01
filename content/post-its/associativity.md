@@ -1,0 +1,1 @@
+2 way associativy autmatically gives n-way associativity!

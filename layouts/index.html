@@ -1,0 +1,53 @@
+{{ define "main" }}
+<!-- Main Posts Section -->
+
+<div style="margin-top: 2rem;">Pietro Marsella's Stash </div>
+
+<div style="margin-top: 1rem;"></div>For all the things I don't know where to put : ) </div>
+
+<section>
+  <h1 style="font-size: 2.5rem;">Posts</h1>
+  <div>
+    {{ $posts := where .Site.RegularPages "Section" "posts" }}
+    {{ range first 5 $posts }}
+      <article class="post-item" style="margin: 2rem 0; padding: 0;">
+        <h2 style="margin: 0;">
+          <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        </h2>
+        <div style="margin-left: 1.5rem;">
+          <small style="display: block; margin-top: 0.5rem; margin-bottom: 0.5rem;">{{ .Date.Format "2006-01-02" }}</small>
+          {{ with .Plain }}
+            {{ $firstLine := index (split . "\n") 0 }}
+            <div class="excerpt">{{ $firstLine }}</div>
+          {{ end }}
+        </div>
+      </article>
+    {{ end }}
+    {{ if gt (len $posts) 5 }}
+    ...
+      <div style="margin-top: 1rem;">
+        <a href="/posts">All Posts</a>
+      </div>
+    {{ end }}
+  </div>
+</section>
+
+<section>
+  <h1 style="font-size: 2.5rem;">Post-Its</h1>
+  <div style="border-left: 4px solid #ccc; padding-left: 1em;">
+    {{ $postIts := where .Site.RegularPages "Section" "post-its" }}
+    {{ range first 5 $postIts }}
+      <div style="margin: 0.5em 0;">
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        &ndash;
+        <span>{{ .Date.Format "01-02" }}</span>
+      </div>
+    {{ end }}
+    {{ if gt (len $postIts) 5 }}
+      <div style="margin-top: 1rem;">
+        <a href="/post-its">See all post-its →</a>
+      </div>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

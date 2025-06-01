@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<style type=text/css>body{font-family:monospace;}</style>
+	<title>Lazy Matmuls</title>
+	
+	
+	<link rel="stylesheet" href="/css/style.css">
+	
+	
+</head>
+<body>
+	<header style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem;">
+	
+	<h1 style="font-size: 2.5rem; margin: 0;">
+	  <a href="http://example.org/" style="text-decoration: none; color: inherit;">
+		=&lt;&lt; Pietro&#39;s Notes >>=
+	  </a>
+	</h1>
+  
+	<span style="font-size: 1.2rem;">random walking</span>
+  </header>
+  
+  <nav>
+	
+	  
+		<a href="/"><b>Home</b></a>&nbsp;
+	  
+		<a href="/posts/"><b>Posts</b></a>&nbsp;
+	  
+		<a href="/post-its/"><b>Post-Its</b></a>&nbsp;
+	  
+		<a href="/about/"><b>About</b></a>&nbsp;
+	  
+	
+  </nav>
+
+	
+	<main>
+		<article>
+			<h1>Lazy Matmuls</h1>
+		       
+
+			<div>
+				<p>As some of you may know matrix multiplication is associative (a.k.a. all the parenthizations give the same result).
+But when you carry out the computation you <em>have</em> to choose some order. But associativity makes this irrelevant, right?</p>
+<p>Consider:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>Matrix <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>ndarray
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@dataclass</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Parenthization</span>:
+</span></span><span style="display:flex;"><span>    left: Parenthization <span style="color:#f92672">|</span> Matrix
+</span></span><span style="display:flex;"><span>    right: Parenthization <span style="color:#f92672">|</span> Matrix
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">random_matrices</span>(n: int) <span style="color:#f92672">-&gt;</span> list[Matrix]:
+</span></span><span style="display:flex;"><span>    dims <span style="color:#f92672">=</span> [random<span style="color:#f92672">.</span>choice((<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">100</span>)) <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(n <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> [np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(dims[i], dims[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>]) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(n)]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">random_parenthization</span>(matrices: list[Matrix]) <span style="color:#f92672">-&gt;</span> Parenthization <span style="color:#f92672">|</span> Matrix:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> len(matrices) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> matrices[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    k <span style="color:#f92672">=</span> random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">1</span>, len(matrices) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    left <span style="color:#f92672">=</span> random_parenthization(matrices[:k])
+</span></span><span style="display:flex;"><span>    right <span style="color:#f92672">=</span> random_parenthization(matrices[k:])
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> Parenthization(left, right)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_product</span>(node: Parenthization <span style="color:#f92672">|</span> Matrix) <span style="color:#f92672">-&gt;</span> Matrix:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> isinstance(node, Matrix):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> node
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> get_product(node<span style="color:#f92672">.</span>left) <span style="color:#f92672">@</span> get_product(node<span style="color:#f92672">.</span>right)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    matrices <span style="color:#f92672">=</span> random_matrices(<span style="color:#ae81ff">100</span>)
+</span></span><span style="display:flex;"><span>    parenthizations <span style="color:#f92672">=</span> [random_parenthization(matrices) <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1_000</span>)]
+</span></span><span style="display:flex;"><span>    performance_barplot(parenthizations, get_product)
+</span></span></code></pre></div><blockquote>
+<p>TLDR: For a given product of matrices, generate a bunch of random parenthizations and see how long they take to compute.</p></blockquote>
+<p>Which gives us:</p>
+<pre tabindex="0"><code>   420-   600 ms │ ████
+   600-   780 ms │ ██████████████████
+   780-   960 ms │ ████████████████████████████
+   960-  1130 ms │ ████████████████████████████████████████
+  1130-  1310 ms │ █████████████████████████████
+  1310-  1490 ms │ ██████████████████████████
+  1490-  1670 ms │ ███████████████████
+  1670-  1840 ms │ ████████████
+  1840-  2020 ms │ ████████████
+  2020-  2200 ms │ ██████
+  2200-  2380 ms │ ███
+  2380-  2550 ms │ ███
+  2550-  2730 ms │ ██
+  2730-  2910 ms │ █
+  2910-  3090 ms │ 
+  3090-  3260 ms │ █
+</code></pre><p>Holy mother of performance-variance-for-semantically-equivalent-expressions!</p>
+<hr>
+<p>But why does this happen??</p>
+<p>
+<figure>
+  <img src="dims.png" alt="" />
+</figure>
+
+
+</p>
+<blockquote>
+<p>Different Parenthization =&gt; Different Dimensions!
+Multiplying an <code>X</code> by <code>Y</code> matrix with a <code>Y</code> by <code>Z</code> matrix takes about <code>O(XYZ)</code> scalar ops (XYZ multiplications, X(Y-1)Z additions). So on the LHS each pairwise product takes 1 op, in the RHS about 2 million!</p></blockquote>
+<p>Oh yeah that makes sense! But how do we fix it? Boringly, with some DP:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">optimal_parenthization</span>(matrices: list[Matrix]) <span style="color:#f92672">-&gt;</span> tuple[int, Parenthization <span style="color:#f92672">|</span> Matrix]:
+</span></span><span style="display:flex;"><span>    n <span style="color:#f92672">=</span> len(matrices)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> n <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>, matrices[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    dims <span style="color:#f92672">=</span> [matrices[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]] <span style="color:#f92672">+</span> [m<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>] <span style="color:#66d9ef">for</span> m <span style="color:#f92672">in</span> matrices]
+</span></span><span style="display:flex;"><span>    mult_cost <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> i, k, j : dims[i] <span style="color:#f92672">*</span> dims[k <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">*</span> dims[j <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@cache</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">solve</span>(i: int, j: int) <span style="color:#f92672">-&gt;</span> tuple[int, Parenthization <span style="color:#f92672">|</span> Matrix]:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> i <span style="color:#f92672">==</span> j:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>, matrices[i]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        best_cost, best_tree <span style="color:#f92672">=</span> float(<span style="color:#e6db74">&#34;inf&#34;</span>), <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> k <span style="color:#f92672">in</span> range(i, j):
+</span></span><span style="display:flex;"><span>            left_cost,  left_tree  <span style="color:#f92672">=</span> solve(i, k)
+</span></span><span style="display:flex;"><span>            right_cost, right_tree <span style="color:#f92672">=</span> solve(k <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, j)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            cost <span style="color:#f92672">=</span> mult_cost(i, k, j)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            total_cost <span style="color:#f92672">=</span> left_cost <span style="color:#f92672">+</span> right_cost <span style="color:#f92672">+</span> cost
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> total_cost <span style="color:#f92672">&lt;</span> best_cost:
+</span></span><span style="display:flex;"><span>                best_cost <span style="color:#f92672">=</span> total_cost
+</span></span><span style="display:flex;"><span>                best_tree <span style="color:#f92672">=</span> Parenthization(left_tree, right_tree)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> best_cost, best_tree
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> solve(<span style="color:#ae81ff">0</span>, n <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)
+</span></span></code></pre></div><blockquote>
+<p>TLDR: To find optimal parenthization: for all the ways to split the list into 2 contiguous chunks, recursively find the cost of the 2 sub-chunks, and add sum them to the cost of doing the top-level multiplication. Then find the minimum value: that is the optimal parenthization!</p></blockquote>
+<hr>
+<p>But, ew. Now our code logic is tangled up with implementations details concerning runtimes. How do we address this?</p>
+<p>Ideally something like this:</p>
+<p>
+<figure>
+  <img src="canonicalize.png" alt="" />
+</figure>
+
+
+</p>
+<p>But here&rsquo;s the problem: the matmul is supposed to always be a single matrix (the product of all the matrices up to that point).
+But now you are representing it as a tree (of parenthesis)!
+Solution: just <strong>collapse</strong> it down to a single matrix when the user &ldquo;looks&rdquo; at it! (a.k.a. when the explicit value of the matrix is needed: as long as we keep multiplying, we can just keep building up the list).
+So we can do something like this!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a6e22e">@dataclass</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LazyMat</span>:
+</span></span><span style="display:flex;"><span>    matrices: list[Matrix] <span style="color:#f92672">=</span> field(default_factory<span style="color:#f92672">=</span>list)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__matmul__</span>(self, other: Matrix <span style="color:#f92672">|</span> LazyMat) <span style="color:#f92672">-&gt;</span> LazyMat:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> isinstance(other, Matrix):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> LazyMat(self<span style="color:#f92672">.</span>matrices <span style="color:#f92672">+</span> [other])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> isinstance(other, LazyMat):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> LazyMat(self<span style="color:#f92672">.</span>matrices <span style="color:#f92672">+</span> other<span style="color:#f92672">.</span>matrices)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">NotImplementedError</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__rmatmul__</span>(self, other: Matrix <span style="color:#f92672">|</span> LazyMat) <span style="color:#f92672">-&gt;</span> LazyMat:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> isinstance(other, Matrix):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> LazyMat([other] <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>matrices)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> isinstance(other, LazyMat):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> LazyMat(other<span style="color:#f92672">.</span>matrices <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>matrices)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">NotImplementedError</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">value</span>(self) <span style="color:#f92672">-&gt;</span> Matrix:
+</span></span><span style="display:flex;"><span>        _, tree <span style="color:#f92672">=</span> optimal_parenthization(self<span style="color:#f92672">.</span>matrices)
+</span></span><span style="display:flex;"><span>        prod <span style="color:#f92672">=</span> get_product(tree)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>matrices <span style="color:#f92672">=</span> [prod]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> prod
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__array__</span>(self, dtype<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>value()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>asarray(out, dtype<span style="color:#f92672">=</span>dtype) <span style="color:#66d9ef">if</span> dtype <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span> <span style="color:#66d9ef">else</span> out
+</span></span></code></pre></div><p>So now we passively build up the tree each time we do a matmul, and use <code>.value()</code> when we need the matrix itself. Cool!</p>
+<hr>
+<p>Now for the speedup over eager:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">random_matrices</span>(n: int) <span style="color:#f92672">-&gt;</span> list[Matrix]:
+</span></span><span style="display:flex;"><span>    dims <span style="color:#f92672">=</span> [random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">1000</span>) <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(n <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> [np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(dims[i], dims[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>]) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(n)]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">naive_product</span>(chain):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;(((A @ B) @ C) @ …).&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    out <span style="color:#f92672">=</span> chain[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> m <span style="color:#f92672">in</span> chain[<span style="color:#ae81ff">1</span>:]:
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> out <span style="color:#f92672">@</span> m
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> out
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">lazy_product</span>(chain):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Wait to evaluate, then do the optimal parenthization&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    acc <span style="color:#f92672">=</span> LazyMat()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> m <span style="color:#f92672">in</span> chain:
+</span></span><span style="display:flex;"><span>        acc <span style="color:#f92672">=</span> acc <span style="color:#f92672">@</span> m
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> acc<span style="color:#f92672">.</span>value()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bench</span>(fn, mats, runs<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>):
+</span></span><span style="display:flex;"><span>    t0 <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>perf_counter()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> tqdm(range(runs)):
+</span></span><span style="display:flex;"><span>        fn(mats)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> (time<span style="color:#f92672">.</span>perf_counter() <span style="color:#f92672">-</span> t0) <span style="color:#f92672">/</span> runs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+</span></span><span style="display:flex;"><span>    random<span style="color:#f92672">.</span>seed(<span style="color:#ae81ff">0</span>); np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    mats <span style="color:#f92672">=</span> random_matrices(<span style="color:#ae81ff">100</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    t_naive <span style="color:#f92672">=</span> bench(naive_product, mats)
+</span></span><span style="display:flex;"><span>    t_lazy  <span style="color:#f92672">=</span> bench(lazy_product,  mats)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Naïve left‑to‑right : </span><span style="color:#e6db74">{</span>t_naive<span style="color:#f92672">*</span><span style="color:#ae81ff">1e3</span><span style="color:#e6db74">:</span><span style="color:#e6db74">7.1f</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> ms&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Lazy optimal        : </span><span style="color:#e6db74">{</span>t_lazy<span style="color:#f92672">*</span><span style="color:#ae81ff">1e3</span><span style="color:#e6db74">:</span><span style="color:#e6db74">7.1f</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> ms&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Speed‑up            : </span><span style="color:#e6db74">{</span>t_naive<span style="color:#f92672">/</span>t_lazy<span style="color:#e6db74">:</span><span style="color:#e6db74">7.1f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">×&#34;</span>)
+</span></span></code></pre></div><pre tabindex="0"><code>Naïve left‑to‑right :  2298.8 ms
+Lazy optimal        :   227.0 ms
+Speed‑up            :    10.1×
+</code></pre><p>But it doesn&rsquo;t have to end there! We can also act lazily with respect to a whole bunch of over operators. This allows us to do 2 things:</p>
+<ul>
+<li>Right now, each non-matmul operation forces us to compute the entire tree: the more operators we support, the more we can keep the lazy representation!</li>
+<li>More operators =&gt; more opportunities for optimizations. E.g. if matrix addition is supported, we can do this: <code>AB+AC</code> -&gt; <code>A(B+C)</code>!</li>
+</ul>
+<p>Stay tuned for part 2&hellip;</p>
+<h3 id="takeaways">Takeaways</h3>
+<ul>
+<li>Canonicalization and structured representations are pretty cool I guess?</li>
+<li>With good &ldquo;compilers&rdquo; and lazy evaluation, you can separate logic from performance details.</li>
+</ul>
+<h2 id="heading"><a href="https://github.com/Marsella8/lazy-matmuls">[Code]</a></h2>
+
+			</div>
+		</article>
+	</main>
+
+	<footer style="margin-top: 3rem;">
+	<p>
+	  &copy; 2025 <a href="http://example.org/">
+		<b>Pietro&#39;s Notes</b>
+	  </a>.
+		<a href="https://github.com/Marsella8"><b>GitHub</b></a>.
+	</p>
+  </footer>
+
+</body>
+</html>

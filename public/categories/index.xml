@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on Pietro&#39;s Notes</title>
+    <link>http://example.org/categories/</link>
+    <description>Recent content in Categories on Pietro&#39;s Notes</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 18 May 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://example.org/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Compilers</title>
+      <link>http://example.org/categories/compilers/</link>
+      <pubDate>Sun, 18 May 2025 00:00:00 +0000</pubDate>
+      <guid>http://example.org/categories/compilers/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Formal-Languages</title>
+      <link>http://example.org/categories/formal-languages/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      <guid>http://example.org/categories/formal-languages/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Graph-Theory</title>
+      <link>http://example.org/categories/graph-theory/</link>
+      <pubDate>Wed, 14 May 2025 00:00:00 +0000</pubDate>
+      <guid>http://example.org/categories/graph-theory/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<style type=text/css>body{font-family:monospace;}</style>
+	<title>Lazy-Matmuls</title>
+	
+	
+	<link rel="stylesheet" href="/css/style.css">
+	
+	
+</head>
+<body>
+	<header style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem;">
+	
+	<h1 style="font-size: 2.5rem; margin: 0;">
+	  <a href="http://localhost:1313/" style="text-decoration: none; color: inherit;">
+		=&lt;&lt; Pietro&#39;s Notes >>=
+	  </a>
+	</h1>
+  
+	<span style="font-size: 1.2rem;">random walking</span>
+  </header>
+  
+  <nav>
+	
+	  
+		<a href="/"><b>Home</b></a>&nbsp;
+	  
+		<a href="/posts/"><b>Posts</b></a>&nbsp;
+	  
+		<a href="/post-its/"><b>Post-its</b></a>&nbsp;
+	  
+		<a href="/about/"><b>About</b></a>&nbsp;
+	  
+	
+  </nav>
+
+	
+	<main>
+		<article>
+			<h1>Lazy-Matmuls</h1>
+		       
+
+			<div>
+				<h2 id="intro">Intro</h2>
+<p>Consider:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>X <span style="color:#f92672">=</span> (<span style="color:#ae81ff">2</span><span style="color:#f92672">**</span>np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>uniform(<span style="color:#f92672">-</span><span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">2</span><span style="color:#f92672">**</span><span style="color:#ae81ff">8</span>))<span style="color:#f92672">.</span>astype(np<span style="color:#f92672">.</span>float32)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">blah</span>(X: np<span style="color:#f92672">.</span>array):  <span style="color:#75715e"># ((...((a+b)+c)+d)+...)+z)</span>
+</span></span><span style="display:flex;"><span>    s <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>float32(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> X:
+</span></span><span style="display:flex;"><span>        s <span style="color:#f92672">+=</span> x
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bleh</span>(X: np<span style="color:#f92672">.</span>array):  <span style="color:#75715e"># (((a+b)+(c+d))+...+((w+x)+(y+z)))</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> len(X) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> X[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    mid <span style="color:#f92672">=</span> len(X) <span style="color:#f92672">//</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> bleh(X[mid:]) <span style="color:#f92672">+</span> bleh(X[:mid])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    print(blah(X))  <span style="color:#75715e"># -&gt;</span>
+</span></span><span style="display:flex;"><span>    print(bleh(X))  <span style="color:#75715e"># -&gt;</span>
+</span></span><span style="display:flex;"><span>    print(X<span style="color:#f92672">.</span>sum())  <span style="color:#75715e"># -&gt;</span>
+</span></span></code></pre></div><p>Holy mother of performance-variance-for-semantically-equivalent expressions!</p>
+<p>Wait, why??</p>
+<p>Well, because numerics are cursed. Order of floating-point addition matters—<strong>a lot</strong>—so those two ways of summing can give noticeably different answers (and speeds). And, you know, <code>X.sum()</code> is probably smarter than either.</p>
+<h3 id="how-do-we-fix-this">How do we fix this?</h3>
+<p>Boring answer: mix logic with numerical tricks for better stability. Example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">matmul</span>(Ms: list[np<span style="color:#f92672">.</span>array]):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> len(Ms) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> Ms
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># ...</span>
+</span></span></code></pre></div><p>But, ew. Now our code logic is tangled up with low-level floating-point hacks. Gross!</p>
+<h4 id="idea">Idea:</h4>
+<ul>
+<li><strong>Canonicalize</strong> your computation as a graph.</li>
+<li>Apply a cool algorithm to compute the sum in a smart way.</li>
+</ul>
+<p>So:</p>
+<pre tabindex="0"><code>Program -&gt; Graph
+        -&gt; Canonicalization -&gt; Fancy sum algorithm
+Program &lt;- Graph
+</code></pre><p>But here&rsquo;s the problem:
+Your sum is supposed to end up as a <code>float</code>.
+But your canonicalized thing is a tree!
+How do you <em>store</em> a tree, when every step is supposed to be a float?
+FUCK! I wish I knew how to address this.
+If only I weren’t so lazy…</p>
+<p>![Funny picture of user looking away]</p>
+<p>Wait! Just <strong>collapse</strong> it down to a float when the user isn’t looking! Problem solved, right? But&hellip;</p>
+<h4 id="trick-i-skipped-a-step">Trick: I skipped a step!</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>X <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([<span style="color:#f92672">...</span>], dtype<span style="color:#f92672">=</span>Floaty)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">blah</span>(X: np<span style="color:#f92672">.</span>array): <span style="color:#75715e"># ((...((a+b)+c)+d)+...)+z)</span>
+</span></span><span style="display:flex;"><span>    s <span style="color:#f92672">=</span> Floaty(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> X:
+</span></span><span style="display:flex;"><span>        s <span style="color:#f92672">+=</span> x
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> s<span style="color:#f92672">.</span>value()
+</span></span></code></pre></div><h4 id="under-the-hood">Under the hood:</h4>
+<ul>
+<li>If it’s an add: store it in a tree.</li>
+<li>If it’s anything else: force evaluation (<code>value()</code>).</li>
+<li><code>.value()</code> does the smart thing, e.g. Kahan sum.</li>
+</ul>
+<p>(And yeah, you could use operator overloading if you insist.)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Floaty</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ... keep a tree of adds</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ... or collapse to value as needed</span>
+</span></span></code></pre></div><p>Now, you can even rewrite the tree with associativity rules for optimal accuracy or speed.</p>
+<hr>
+<h4 id="small-problem">Small Problem:</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">100</span>):
+</span></span><span style="display:flex;"><span>    print(M)
+</span></span></code></pre></div><p>You just recomputed the whole thing 100 times! Fuuuuck.</p>
+<p><strong>Solutions:</strong></p>
+<ul>
+<li>Collapse to a value when you can’t fuse anymore.</li>
+<li>Or cache the value, keep the view (classic lazy evaluation).</li>
+</ul>
+<hr>
+<h3 id="takeaways">Takeaways</h3>
+<ul>
+<li>Canonicalization and structured representations are <em>cool</em>, I guess?</li>
+<li>With good compilers and lazy evaluation, you can separate logic from performance/numerical details.</li>
+<li>&hellip;Who cares?</li>
+</ul>
+<p><strong>A caveat:</strong>
+<code>sum([Floaty(x) for x in range(10**100)])</code> will make your computer explode.</p>
+<p>***This makes even more sense for matrices, since the order of evaluation can matter <em>a lot</em> for performance (should’ve probably talked about that&hellip;).</p>
+
+			</div>
+		</article>
+	</main>
+
+	<footer style="margin-top: 3rem;">
+	<p>
+	  &copy; 2025 <a href="http://localhost:1313/">
+		<b>Pietro&#39;s Notes</b>
+	  </a>.
+		<a href="https://github.com/yourusername"><b>GitHub</b></a>.
+	</p>
+  </footer>
+
+</body>
+</html>
