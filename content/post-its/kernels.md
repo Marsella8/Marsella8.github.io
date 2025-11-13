@@ -1,1 +1,0 @@
-Kernels are about memory access patterns => No global compilers?

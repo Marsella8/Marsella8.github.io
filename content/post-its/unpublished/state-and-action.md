@@ -1,0 +1,1 @@
+In RL, having state and action be separate only makes sense if the action has a non-deterministic change on the state (but e.g. in LLMs this is not the case, as outputting a new token updates the state predictably). In which situation does updating the state has an not-fully predictable change in the state of the world??

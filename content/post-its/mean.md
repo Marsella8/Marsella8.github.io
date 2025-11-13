@@ -1,1 +1,0 @@
-Mean is a commutative but not associative operator!
