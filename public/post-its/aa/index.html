@@ -72,3 +72,61 @@
 
 </body>
 </html>
+import torch
+import torch.nn as nn
+from torch.utils.cpp_extension import load_inline
+
+# Define the custom CUDA kernel for matrix multiplication
+matmul_source = """
+#include <torch/extension.h>
+#include <cuda_runtime.h>
+
+__global__ void matmul_kernel(const float* A, const float* B, float* C, int M, int K, int N) {
+    int row = blockIdx.y * blockDim.y + threadIdx.y;
+    int col = blockIdx.x * blockDim.x + threadIdx.x;
+
+    // RUNTIME ERROR INJECTED: Model 
+    if (row < M && col < N) {   
+        float sum = 0.0f;
+        for (int k = 0; k < K; ++k) {
+            sum += A[row * K + k] * B[k * M + col];
+        }
+        C[row * M + col] = sum;
+    }
+}
+
+torch::Tensor matmul_cuda(torch::Tensor a, torch::Tensor b) {
+    int M = a.size(0);
+    int K = a.size(1);
+    int N = b.size(1);
+
+    auto c = torch::zeros({M, N}, a.options());
+
+    dim3 block_dim(16, 16);
+    // Grid is rounded up, creating extra threads
+    dim3 grid_dim((N + block_dim.x - 1) / block_dim.x, (M + block_dim.y - 1) / block_dim.y);
+
+    matmul_kernel<<<grid_dim, block_dim>>>(a.data_ptr<float>(), b.data_ptr<float>(), c.data_ptr<float>(), M, K, N);
+
+    return c;
+}
+"""
+
+matmul_cpp_source = "torch::Tensor matmul_cuda(torch::Tensor a, torch::Tensor b);"
+
+# Compile
+matmul_op = load_inline(
+    name="matmul_op_runtime_err",
+    cpp_sources=matmul_cpp_source,
+    cuda_sources=matmul_source,
+    functions=["matmul_cuda"],
+    with_cuda=True
+)
+
+class ModelNew(nn.Module):
+    def __init__(self) -> None:
+        super().__init__()
+        self.matmul_op = matmul_op
+
+    def forward(self, a, b):
+        return self.matmul_op.matmul_cuda(a, b)

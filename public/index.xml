@@ -2,88 +2,123 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Pietro&#39;s Notes</title>
-    <link>http://marsella.io/</link>
+    <link>http://localhost:1313/</link>
     <description>Recent content on Pietro&#39;s Notes</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 18 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://marsella.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Lazy Matmuls</title>
-      <link>http://marsella.io/posts/lazy-matmuls/</link>
+      <link>http://localhost:1313/posts/lazy-matmuls/</link>
       <pubDate>Sun, 18 May 2025 00:00:00 +0000</pubDate>
-      <guid>http://marsella.io/posts/lazy-matmuls/</guid>
+      <guid>http://localhost:1313/posts/lazy-matmuls/</guid>
       <description>&lt;p&gt;As some of you may know matrix multiplication is associative (a.k.a. all the parenthizations give the same result).&#xA;But when you carry out the computation you &lt;em&gt;have&lt;/em&gt; to choose some order. But associativity makes this irrelevant, right?&lt;/p&gt;&#xA;&lt;p&gt;Consider:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Matrix &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ndarray&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;@dataclass&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Parenthization&lt;/span&gt;:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    left: Parenthization &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; Matrix&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    right: Parenthization &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; Matrix&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;random_matrices&lt;/span&gt;(n: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; list[Matrix]:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dims &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;choice((&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;)) &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)]&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; [np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;randn(dims[i], dims[i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]) &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n)]&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;random_parenthization&lt;/span&gt;(matrices: list[Matrix]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; Parenthization &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; Matrix:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; len(matrices) &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; matrices[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    k &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;randint(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, len(matrices) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    left &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; random_parenthization(matrices[:k])&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    right &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; random_parenthization(matrices[k:])&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; Parenthization(left, right)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get_product&lt;/span&gt;(node: Parenthization &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; Matrix) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; Matrix:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; isinstance(node, Matrix):&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; node&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; get_product(node&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;left) &lt;span style=&#34;color:#f92672&#34;&gt;@&lt;/span&gt; get_product(node&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;right)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    matrices &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; random_matrices(&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    parenthizations &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [random_parenthization(matrices) &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;1_000&lt;/span&gt;)]&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    performance_barplot(parenthizations, get_product)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;&#xA;&lt;p&gt;TLDR: For a given product of matrices, generate a bunch of random parenthizations and see how long they take to compute.&lt;/p&gt;</description>
     </item>
     <item>
       <title>About</title>
-      <link>http://marsella.io/about/</link>
+      <link>http://localhost:1313/about/</link>
       <pubDate>Sat, 17 May 2025 12:33:03 -0700</pubDate>
-      <guid>http://marsella.io/about/</guid>
+      <guid>http://localhost:1313/about/</guid>
       <description>&lt;p&gt;If you wanna get in touch, feel free to send me an email at &lt;a href=&#34;mailto:pietromax.marsella@gmail.com&#34;&gt;pietromax.marsella@gmail.com&lt;/a&gt; : )&lt;/p&gt;</description>
     </item>
     <item>
       <title>Canonicalization</title>
-      <link>http://marsella.io/post-its/canonicalization/</link>
+      <link>http://localhost:1313/post-its/unpublished/canonicalization/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>http://marsella.io/post-its/canonicalization/</guid>
+      <guid>http://localhost:1313/post-its/unpublished/canonicalization/</guid>
       <description>&lt;p&gt;It&amp;rsquo;s all canonicalization! God fucking damn-it, every single time there is a problem is always because of an&lt;/p&gt;</description>
     </item>
     <item>
       <title>Graph Libraries are Hard</title>
-      <link>http://marsella.io/posts/graph-libraries/</link>
+      <link>http://localhost:1313/posts/graph-libraries/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>http://marsella.io/posts/graph-libraries/</guid>
+      <guid>http://localhost:1313/posts/graph-libraries/</guid>
       <description></description>
     </item>
     <item>
       <title>Groups and Lean</title>
-      <link>http://marsella.io/posts/lean-groups/</link>
+      <link>http://localhost:1313/posts/lean-groups/</link>
       <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
-      <guid>http://marsella.io/posts/lean-groups/</guid>
+      <guid>http://localhost:1313/posts/lean-groups/</guid>
       <description>&lt;p&gt;Groups are so cool!&#xA;Lean is so cool!&#xA;Why am I doing this? You&#39;ll see!&lt;/p&gt;</description>
     </item>
     <item>
       <title>Modular Decomposition</title>
-      <link>http://marsella.io/posts/modular-decomposition/</link>
+      <link>http://localhost:1313/posts/modular-decomposition/</link>
       <pubDate>Wed, 14 May 2025 00:00:00 +0000</pubDate>
-      <guid>http://marsella.io/posts/modular-decomposition/</guid>
+      <guid>http://localhost:1313/posts/modular-decomposition/</guid>
       <description>&lt;p&gt;Recursive Factorization of stuff? WOW&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://marsella.io/post-its/associativity/</link>
+      <link>http://localhost:1313/beliefs/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://marsella.io/post-its/associativity/</guid>
-      <description>&lt;p&gt;2 way associativy autmatically gives n-way associativity!&lt;/p&gt;</description>
+      <guid>http://localhost:1313/beliefs/</guid>
+      <description>&lt;p&gt;I undestand things when they are type annotated (see RL library)&#xA;What I cannot create I do not understand (this is a necessary, not sufficient condition).&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://marsella.io/post-its/bands-and-torus/</link>
+      <link>http://localhost:1313/post-its/unpublished/associativity/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://marsella.io/post-its/bands-and-torus/</guid>
+      <guid>http://localhost:1313/post-its/unpublished/associativity/</guid>
+      <description>&lt;p&gt;2 way associativy autmatically gives n-way associativity!&#xA;Basically on a bin tree, if we can do the transformation:&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;.&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;p&gt;/   &lt;br&gt;&#xA;B     C [ADD SHCEMA OF ] =&amp;gt;&lt;/p&gt;&#xA;&lt;p&gt;Then we can take any tree, keep the leaves fixed, and mess with the composition, while still mintaing equilvalence&lt;/p&gt;&#xA;&lt;p&gt;You can reduce this to a canonicalization issue (i.e. from any parenthization, can we get to having it be, say, left associative)&lt;/p&gt;&#xA;&lt;p&gt;(A((BC)D))&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/post-its/unpublished/bands-and-torus/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/post-its/unpublished/bands-and-torus/</guid>
       <description>&lt;p&gt;D_2p are bands, C_2p is torus&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://marsella.io/post-its/kernels/</link>
+      <link>http://localhost:1313/post-its/unpublished/bet/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://marsella.io/post-its/kernels/</guid>
-      <description>&lt;p&gt;Kernels are about memory access patterns =&amp;gt; No global compilers?&lt;/p&gt;</description>
+      <guid>http://localhost:1313/post-its/unpublished/bet/</guid>
+      <description>&lt;p&gt;2 opposing tendencies wrt raw materials:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;(#1) Harder to mine the more time passes (low hangin rfruites akk rich  or easy to mine mines becmoe less plentiful)&lt;/li&gt;&#xA;&lt;li&gt;(#2) The more we mine, the more sphisticated large scale stuff we can build to use those resources effieintly (or pivot to other things).&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;Analogously:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;(#1) The more people, teh more quickly we cosmuem resources&lt;/li&gt;&#xA;&lt;li&gt;(#2) the more people, the more smart people can work on making extraction more efficient&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;Can #2 outrun #1? Sure hope so !!&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://marsella.io/post-its/mean/</link>
+      <link>http://localhost:1313/post-its/unpublished/mean/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://marsella.io/post-its/mean/</guid>
-      <description>&lt;p&gt;Mean is a commutative but not associative operator!&lt;/p&gt;</description>
+      <guid>http://localhost:1313/post-its/unpublished/mean/</guid>
+      <description>&lt;p&gt;Mean is a commutative but not associative operator!&lt;/p&gt;&#xA;&lt;p&gt;m(x,y) = (x + y) / 2&lt;/p&gt;&#xA;&lt;p&gt;m(m(1,2),3) = m(M(2,1), 3) = m()&lt;/p&gt;&#xA;&lt;p&gt;m(m(1,2), 3) != m(1, m(2,3))&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://marsella.io/post-its/naive-questions/</link>
+      <link>http://localhost:1313/post-its/unpublished/naive-questions/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://marsella.io/post-its/naive-questions/</guid>
+      <guid>http://localhost:1313/post-its/unpublished/naive-questions/</guid>
       <description>&lt;ol&gt;&#xA;&lt;li&gt;Why do we treat multiplication and addition so differently. Isn;t one just repeating the other?&lt;/li&gt;&#xA;&lt;li&gt;Why do Sylow groups matter?&lt;/li&gt;&#xA;&lt;li&gt;So ideals are the ring theory equivalent of normal subgroups:&#xA;Subgroups &amp;lt;=&amp;gt; SUbring: they have to be closed wrt operator (add and mult, resp).&#xA;Normal Subgroups &amp;lt;=&amp;gt; Ideals: on top of conditions above, we also need to be closed wrt to conjugacy (resp add, mult) wrt to all the elements outside of the group. Question? Why is the absorption 1condition imposed on mult rather&lt;/li&gt;&#xA;&lt;/ol&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/post-its/unpublished/orthogonality/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/post-its/unpublished/orthogonality/</guid>
+      <description>&lt;p&gt;Expceted orthongonallity of 2 random vectors in R^n.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/post-its/unpublished/state-and-action/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/post-its/unpublished/state-and-action/</guid>
+      <description>&lt;p&gt;In RL, having state and action be separate only makes sense if the action has a non-deterministic change on the state (but e.g. in LLMs this is not the case, as outputting a new token updates the state predictably). In which situation does updating the state has an not-fully predictable change in the state of the world??&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/post-its/unpublished/wheat/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/post-its/unpublished/wheat/</guid>
+      <description>&lt;h2 id=&#34;mesopotamia-2000bc&#34;&gt;Mesopotamia 2000BC:&lt;/h2&gt;&#xA;&lt;p&gt;Yearly Yield per Hectar of Land: 1.56 +- 0.28 t/ha&#xA;[https://www.sciencedirect.com/science/article/abs/pii/S0305440300905697]&lt;/p&gt;&#xA;&lt;p&gt;Man Hours to go end-to-end on a hectare of land: &amp;hellip;&lt;/p&gt;&#xA;&lt;p&gt;Wheat Caloric Density: &amp;hellip;&lt;/p&gt;&#xA;&lt;p&gt;Assume that 40% is lost and 10% is planted back&lt;/p&gt;&#xA;&lt;p&gt;Worker: assume 2500 cal / day, 50hrs per week.&lt;/p&gt;&#xA;&lt;p&gt;Pessimistic:&#xA;Optimistic:&#xA;Geo Mean:&lt;/p&gt;&#xA;&lt;h2 id=&#34;side-thing&#34;&gt;Side Thing&lt;/h2&gt;&#xA;&lt;p&gt;We got really good at grwoing wheat! Kg of wheat per hour of work:&#xA;2000bc&#xA;&amp;hellip;2&#xA;2025!&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/questions/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/questions/</guid>
+      <description>&lt;p&gt;Flops are to software what ___ is to hardware. What is the blank? Maybe it&amp;rsquo;s also flops?&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

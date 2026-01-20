@@ -2,55 +2,65 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://marsella.io/categories/</loc>
+    <loc>http://localhost:1313/categories/</loc>
     <lastmod>2025-05-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://marsella.io/categories/compilers/</loc>
+    <loc>http://localhost:1313/categories/compilers/</loc>
     <lastmod>2025-05-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://marsella.io/posts/lazy-matmuls/</loc>
+    <loc>http://localhost:1313/posts/lazy-matmuls/</loc>
     <lastmod>2025-05-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://marsella.io/</loc>
+    <loc>http://localhost:1313/</loc>
     <lastmod>2025-05-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://marsella.io/posts/</loc>
+    <loc>http://localhost:1313/posts/</loc>
     <lastmod>2025-05-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://marsella.io/about/</loc>
+    <loc>http://localhost:1313/about/</loc>
     <lastmod>2025-05-17T12:33:03-07:00</lastmod>
   </url><url>
-    <loc>http://marsella.io/post-its/canonicalization/</loc>
+    <loc>http://localhost:1313/post-its/unpublished/canonicalization/</loc>
     <lastmod>2025-05-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://marsella.io/categories/formal-languages/</loc>
+    <loc>http://localhost:1313/categories/formal-languages/</loc>
     <lastmod>2025-05-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://marsella.io/posts/graph-libraries/</loc>
+    <loc>http://localhost:1313/posts/graph-libraries/</loc>
     <lastmod>2025-05-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://marsella.io/post-its/</loc>
+    <loc>http://localhost:1313/post-its/</loc>
     <lastmod>2025-05-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://marsella.io/posts/lean-groups/</loc>
+    <loc>http://localhost:1313/posts/lean-groups/</loc>
     <lastmod>2025-05-15T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://marsella.io/categories/graph-theory/</loc>
+    <loc>http://localhost:1313/categories/graph-theory/</loc>
     <lastmod>2025-05-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://marsella.io/posts/modular-decomposition/</loc>
+    <loc>http://localhost:1313/posts/modular-decomposition/</loc>
     <lastmod>2025-05-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://marsella.io/post-its/associativity/</loc>
+    <loc>http://localhost:1313/beliefs/</loc>
   </url><url>
-    <loc>http://marsella.io/post-its/bands-and-torus/</loc>
+    <loc>http://localhost:1313/post-its/unpublished/associativity/</loc>
   </url><url>
-    <loc>http://marsella.io/post-its/kernels/</loc>
+    <loc>http://localhost:1313/post-its/unpublished/bands-and-torus/</loc>
   </url><url>
-    <loc>http://marsella.io/post-its/mean/</loc>
+    <loc>http://localhost:1313/post-its/unpublished/bet/</loc>
   </url><url>
-    <loc>http://marsella.io/post-its/naive-questions/</loc>
+    <loc>http://localhost:1313/post-its/unpublished/mean/</loc>
   </url><url>
-    <loc>http://marsella.io/tags/</loc>
+    <loc>http://localhost:1313/post-its/unpublished/naive-questions/</loc>
+  </url><url>
+    <loc>http://localhost:1313/post-its/unpublished/orthogonality/</loc>
+  </url><url>
+    <loc>http://localhost:1313/post-its/unpublished/state-and-action/</loc>
+  </url><url>
+    <loc>http://localhost:1313/post-its/unpublished/wheat/</loc>
+  </url><url>
+    <loc>http://localhost:1313/questions/</loc>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
   </url>
 </urlset>
